@@ -1,0 +1,15 @@
+  Wiederherzustellende Projekte werden ermittelt...
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+  Alle Projekte sind f├╝r die Wiederherstellung auf dem neuesten Stand.
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+E:\GithubSource\Printserver\src\Printserver\Program.cs(165,9): error CS0128: Eine lokale Variable oder Funktion mit dem Namen "stream" ist bereits in diesem Bereich definiert. [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+
+Fehler beim Buildvorgang.
+
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+E:\GithubSource\Printserver\src\Printserver\Program.cs(165,9): error CS0128: Eine lokale Variable oder Funktion mit dem Namen "stream" ist bereits in diesem Bereich definiert. [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+    2 Warnung(en)
+    1 Fehler
+
+Verstrichene Zeit 00:00:03.94

@@ -1,0 +1,13 @@
+  Wiederherzustellende Projekte werden ermittelt...
+  Alle Projekte sind für die Wiederherstellung auf dem neuesten Stand.
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(149,48): error CS1069: Der Typname "SerialDataReceivedEventArgs" konnte nicht im Namespace "System.IO.Ports" gefunden werden. Dieser Typ wurde an Assembly "System.IO.Ports, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" weitergeleitet. Sie sollten einen Verweis auf die Assembly hinzufügen. [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(19,13): error CS1069: Der Typname "SerialPort" konnte nicht im Namespace "System.IO.Ports" gefunden werden. Dieser Typ wurde an Assembly "System.IO.Ports, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" weitergeleitet. Sie sollten einen Verweis auf die Assembly hinzufügen. [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+
+Fehler beim Buildvorgang.
+
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(149,48): error CS1069: Der Typname "SerialDataReceivedEventArgs" konnte nicht im Namespace "System.IO.Ports" gefunden werden. Dieser Typ wurde an Assembly "System.IO.Ports, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" weitergeleitet. Sie sollten einen Verweis auf die Assembly hinzufügen. [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(19,13): error CS1069: Der Typname "SerialPort" konnte nicht im Namespace "System.IO.Ports" gefunden werden. Dieser Typ wurde an Assembly "System.IO.Ports, Version=0.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" weitergeleitet. Sie sollten einen Verweis auf die Assembly hinzufügen. [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+    0 Warnung(en)
+    2 Fehler
+
+Verstrichene Zeit 00:00:04.83

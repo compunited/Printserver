@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printserver</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Printserver <span style="font-size:0.8rem; opacity:0.6; font-weight:400;">v0.2</span></h1>
+        <div class="status-badge connected">System Online</div>
+    </header>
+
+    <div class="grid">
+        <!-- Queue & Upload Column -->
+        <div class="card">
+            <h2>Job Queue</h2>
+            <div id="uploadZone" class="upload-zone">
+                Drop G-Code here or Click
+            </div>
+            <input type="file" id="fileInput" hidden accept=".gcode,.txt">
+
+            <ul class="job-list" id="jobList">
+                <li class="job-item" style="justify-content:center; color:#555;">Loading...</li>
+            </ul>
+        </div>
+
+        <!-- Monitoring Column -->
+        <div class="card">
+            <h2>Live View</h2>
+            <div class="webcam-container">
+                <!-- Using Stream Endpoint -->
+                <img id="webcamImg" src="/webcam/stream" alt="Webcam Stream"
+                    onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNTU1IiBzdHJva2Utd2lkdGg9IjIiPjxyZWN0IHg9IjMiIHk9IjExIiB3aWR0aD0iMTgiIGhlaWdodD0iMTAiIHJ4PSIyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxNiIgcj0iMyIvPjwvc3ZnPg=='; this.style.padding='40px';">
+            </div>
+
+            <div style="margin-top:20px; text-align:center;">
+                <p style="color:var(--text-secondary); font-size:0.9rem;">
+                    Status: <span id="printerStatus">Unknown</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="card">
+            <h2>Controls</h2>
+
+            <!-- Movement -->
+            <div style="display:flex; justify-content: space-around; margin-bottom: 20px;">
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:5px; width:120px;">
+                    <div></div>
+                    <button class="btn" onclick="moveAxis('Y', 10)">▲</button>
+                    <div></div>
+                    <button class="btn" onclick="moveAxis('X', -10)">◀</button>
+                    <button class="btn" onclick="sendCommand('G28')" title="Home All">🏠</button>
+                    <button class="btn" onclick="moveAxis('X', 10)">▶</button>
+                    <div></div>
+                    <button class="btn" onclick="moveAxis('Y', -10)">▼</button>
+                    <div></div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:5px;">
+                    <button class="btn" onclick="moveAxis('Z', 10)">Z+</button>
+                    <button class="btn" onclick="moveAxis('Z', -10)">Z-</button>
+                </div>
+            </div>
+
+            <!-- Presets -->
+            <div id="preheat-profiles" style="margin-bottom: 15px; display:flex; gap:10px; flex-wrap:wrap;">
+                <!-- Buttons injected by JS -->
+            </div>
+
+            <!-- Temps -->
+            <div style="margin-bottom: 15px;">
+                <h3 style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:5px;">Temperature</h3>
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:5px;">
+                    <span style="width:30px; font-size:0.8rem;">Ext</span>
+                    <input type="number" id="extTemp" value="200"
+                        style="width:60px; padding:5px; border-radius:4px; border:1px solid #444; background:#333; color:white;">
+                    <button class="btn" onclick="setTemp('M104', 'extTemp')">Set</button>
+                    <button class="btn btn-danger" onclick="sendCommand('M104 S0')">Off</button>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <span style="width:30px; font-size:0.8rem;">Bed</span>
+                    <input type="number" id="bedTemp" value="60"
+                        style="width:60px; padding:5px; border-radius:4px; border:1px solid #444; background:#333; color:white;">
+                    <button class="btn" onclick="setTemp('M140', 'bedTemp')">Set</button>
+                    <button class="btn btn-danger" onclick="sendCommand('M140 S0')">Off</button>
+                </div>
+            </div>
+
+            <!-- Fans -->
+            <div>
+                <h3 style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:5px;">Fan</h3>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" onclick="sendCommand('M106 S255')">100%</button>
+                    <button class="btn" onclick="sendCommand('M106 S128')">50%</button>
+                    <button class="btn btn-danger" onclick="sendCommand('M106 S0')">Off</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
