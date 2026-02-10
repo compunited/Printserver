@@ -17,15 +17,58 @@ async function init() {
     await fetchJobs();
     await fetchProfiles();
     setupUpload();
+    setupSliders();
 
     // Auto-refresh queue every 5 seconds
     setInterval(fetchJobs, 5000); // Slower refresh for queue
+
+    // Poll Status (Progress)
+    setInterval(fetchStatus, 1000);
 
     // Refresh Webcam
     setInterval(() => {
         // Simple cache bust for snapshot if stream is not used
         // webcamImg.src = `/webcam/snapshot?t=${Date.now()}`;
     }, 5000);
+}
+
+async function fetchStatus() {
+    try {
+        const res = await fetch(`${API_URL}/printer/status`);
+        if (res.ok) {
+            const status = await res.json();
+            document.getElementById('printerStatus').innerText = status.isPrinting ? 'Printing' : 'Idle';
+
+            document.getElementById('progressBar').value = status.progress;
+            document.getElementById('progressText').innerText = `${status.progress}%`;
+
+            // Lock controls if printing (Optional, Safety Interlock enforces it backend-side, but UX is good)
+            const controls = document.querySelectorAll('#preheat-profiles button, #movement-controls button'); // Need ID on movement controls container if we want to disable
+        }
+    } catch (e) {
+        // ignore
+    }
+}
+
+function setupSliders() {
+    const speed = document.getElementById('speedSlider');
+    const flow = document.getElementById('flowSlider');
+
+    speed.oninput = () => {
+        document.getElementById('speedLabel').innerText = `Speed: ${100 + parseInt(speed.value)}%`;
+    };
+    speed.onchange = () => {
+        const val = 100 + parseInt(speed.value);
+        sendCommand(`M220 S${val}`);
+    };
+
+    flow.oninput = () => {
+        document.getElementById('flowLabel').innerText = `Flow: ${100 + parseInt(flow.value)}%`;
+    };
+    flow.onchange = () => {
+        const val = 100 + parseInt(flow.value);
+        sendCommand(`M221 S${val}`);
+    };
 }
 
 async function fetchJobs() {

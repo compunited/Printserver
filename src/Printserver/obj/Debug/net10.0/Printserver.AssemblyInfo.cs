@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Printserver")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+704f1a9ba88aa692c0d69cc2f511b3689c913ff1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58eff16cb78f041b32065654610b60d7b2307c41")]
 [assembly: System.Reflection.AssemblyProductAttribute("Printserver")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Printserver")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

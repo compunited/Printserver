@@ -49,5 +49,6 @@ E:\GithubSource\Printserver\src\Printserver\obj\Debug\net10.0\ref\Printserver.dl
 E:\GithubSource\Printserver\src\Printserver\bin\Debug\net10.0\Printserver.staticwebassets.runtime.json
 E:\GithubSource\Printserver\src\Printserver\obj\Debug\net10.0\compressed\5vcpp7vme6-{0}-1kzqfeb8tk-1kzqfeb8tk.gz
 E:\GithubSource\Printserver\src\Printserver\bin\Debug\net10.0\appsettings.json
-E:\GithubSource\Printserver\src\Printserver\obj\Debug\net10.0\compressed\alkmevxacc-{0}-m9rijtu8bp-m9rijtu8bp.gz
-E:\GithubSource\Printserver\src\Printserver\obj\Debug\net10.0\compressed\681ri9p4yc-{0}-0drfkg4p3u-0drfkg4p3u.gz
+E:\GithubSource\Printserver\src\Printserver\obj\Debug\net10.0\compressed\alkmevxacc-{0}-aktsone7zz-aktsone7zz.gz
+E:\GithubSource\Printserver\src\Printserver\obj\Debug\net10.0\compressed\681ri9p4yc-{0}-ab6s8r7jsa-ab6s8r7jsa.gz
+E:\GithubSource\Printserver\src\Printserver\obj\Debug\net10.0\compressed\939yvzpcwj-{0}-lbbxv1x4fx-lbbxv1x4fx.gz

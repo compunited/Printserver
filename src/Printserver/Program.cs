@@ -172,6 +172,18 @@ app.MapGet("/printer/profiles", (IOptions<PrintServerOptions> options) =>
     return Results.Ok(options.Value.PreheatProfiles);
 });
 
+app.MapGet("/printer/status", (IPrinterStateService state) =>
+{
+    return Results.Ok(new 
+    { 
+        state.IsPrinting, 
+        state.CurrentJobId, 
+        state.Progress, 
+        state.TotalLines, 
+        state.ProcessedLines 
+    });
+});
+
 app.MapPost("/printer/command", async (HttpRequest request, ISerialConnectionService serialService, IPrinterStateService printerState, CancellationToken cancellationToken) =>
 {
     var commandRequest = await request.ReadFromJsonAsync<PrinterCommandRequest>(cancellationToken: cancellationToken);

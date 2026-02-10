@@ -74,6 +74,8 @@ public class JobProcessor : BackgroundService
         try
         {
             _printerState.IsPrinting = true;
+            _printerState.CurrentJobId = jobId;
+            _printerState.ProcessedLines = 0;
             
             // Update status to Printing
             var job = await _store.UpdateStatusAsync(jobId, PrintJobStatus.Printing);
@@ -83,6 +85,17 @@ public class JobProcessor : BackgroundService
                 return;
             }
 
+            // Count lines for progress
+            // Note: This iterates the string once. For huge files, this might take a moment.
+            // Using a specific line counting method or pre-calculating it during upload would be better for massive files.
+            // For now, this is acceptable for standard prints.
+            using (var lineCounter = new StringReader(job.Content))
+            {
+                int count = 0;
+                while (await lineCounter.ReadLineAsync(stoppingToken) != null) count++;
+                _printerState.TotalLines = count;
+            }
+            
             using var reader = new StringReader(job.Content);
             string? line;
             int lineNumber = 0;
@@ -92,23 +105,19 @@ public class JobProcessor : BackgroundService
                 if (stoppingToken.IsCancellationRequested) return;
 
                 // Check for cancellation status update from API?
-                // Real-world: Check store status occasionally or have a cancellation event.
-                // For now, we trust stoppingToken for app shutdown, but for JOB cancellation 
-                // we should check the store record or an in-memory flag.
-                
                 var currentJobState = await _store.GetAsync(jobId);
                 if (currentJobState?.Status == PrintJobStatus.Canceled)
                 {
                     _logger.LogInformation("Job {JobId} was canceled.", jobId);
-                    return; // Stop processing
+                    return; 
                 }
 
                 lineNumber++;
+                _printerState.ProcessedLines = lineNumber; // Update progress
+                
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith(';')) continue;
 
                 await _serialService.SendGCodeLineAsync(line, stoppingToken);
-                
-                // Optional: Report progress?
             }
 
             // Completed
@@ -123,6 +132,9 @@ public class JobProcessor : BackgroundService
         finally
         {
             _printerState.IsPrinting = false;
+            _printerState.CurrentJobId = null;
+            _printerState.TotalLines = 0;
+            _printerState.ProcessedLines = 0;
         }
     }
 }
