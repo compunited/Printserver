@@ -1,0 +1,17 @@
+  Wiederherzustellende Projekte werden ermittelt...
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+  Alle Projekte sind f├╝r die Wiederherstellung auf dem neuesten Stand.
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(18,22): error CS0246: Der Typ- oder Namespacename "PrintServerOptions" wurde nicht gefunden (m├Âglicherweise fehlt eine using-Direktive oder ein Assemblyverweis). [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(28,86): error CS0246: Der Typ- oder Namespacename "PrintServerOptions" wurde nicht gefunden (m├Âglicherweise fehlt eine using-Direktive oder ein Assemblyverweis). [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+
+Fehler beim Buildvorgang.
+
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(18,22): error CS0246: Der Typ- oder Namespacename "PrintServerOptions" wurde nicht gefunden (m├Âglicherweise fehlt eine using-Direktive oder ein Assemblyverweis). [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+E:\GithubSource\Printserver\src\Printserver\Services\SerialConnectionService.cs(28,86): error CS0246: Der Typ- oder Namespacename "PrintServerOptions" wurde nicht gefunden (m├Âglicherweise fehlt eine using-Direktive oder ein Assemblyverweis). [E:\GithubSource\Printserver\src\Printserver\Printserver.csproj]
+    2 Warnung(en)
+    2 Fehler
+
+Verstrichene Zeit 00:00:03.71

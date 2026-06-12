@@ -1,0 +1,14 @@
+  Wiederherzustellende Projekte werden ermittelt...
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+  Alle Projekte sind f├╝r die Wiederherstellung auf dem neuesten Stand.
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+  Printserver -> E:\GithubSource\Printserver\src\Printserver\bin\Debug\net10.0\Printserver.dll
+
+Der Buildvorgang wurde erfolgreich ausgef├╝hrt.
+
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+E:\GithubSource\Printserver\src\Printserver\Printserver.csproj : warning NU1900: Fehler beim Abrufen von Paketsicherheitsrisikodaten: Der Dienstindex f├╝r die Quelle "https://pkgs.dev.azure.com/GreenerSoftware/_packaging/GreenerSoftwareFeed/nuget/v3/index.json" konnte nicht geladen werden.
+    2 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:05.35
