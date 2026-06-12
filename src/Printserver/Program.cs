@@ -1,3 +1,6 @@
+using System.Collections.Concurrent;
+using System.Text.Json;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Options;
 using Printserver.Models;
 using Printserver.Services;
@@ -15,6 +18,7 @@ builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
+app.MapGet("/", () => Results.Ok(new
 app.UseFileServer();
 
 app.MapGet("/api", () => Results.Ok(new
@@ -163,6 +167,161 @@ app.MapGet("/webcam/stream", async (IOptions<WebcamOptions> options, IHttpClient
 
     var client = httpClientFactory.CreateClient();
     var stream = await client.GetStreamAsync(uri);
+    return Results.Stream(stream, contentType: "multipart/x-mixed-replace; boundary=frame");
+});
+
+app.Run();
+
+internal sealed class PrintJobQueue
+{
+    private readonly ConcurrentQueue<Guid> _queue = new();
+
+    public void Enqueue(Guid id) => _queue.Enqueue(id);
+
+    public Guid? TryDequeue() => _queue.TryDequeue(out var id) ? id : null;
+}
+
+internal interface IPrintJobStore
+{
+    Task<IReadOnlyCollection<PrintJob>> GetAllAsync();
+    Task<PrintJob?> GetAsync(Guid id);
+    Task UpsertAsync(PrintJob job);
+    Task<PrintJob?> UpdateStatusAsync(Guid id, PrintJobStatus status);
+    Task<bool> RemoveAsync(Guid id);
+}
+
+internal sealed class FileBackedPrintJobStore : IPrintJobStore
+{
+    private readonly ConcurrentDictionary<Guid, PrintJob> _jobs = new();
+    private readonly SemaphoreSlim _fileLock = new(1, 1);
+    private readonly string _storagePath;
+
+    public FileBackedPrintJobStore(IOptions<PrintServerOptions> options)
+    {
+        var dataDir = options.Value.DataDirectory;
+        if (string.IsNullOrWhiteSpace(dataDir))
+        {
+            dataDir = Path.Combine(AppContext.BaseDirectory, "data");
+        }
+
+        Directory.CreateDirectory(dataDir);
+        _storagePath = Path.Combine(dataDir, "jobs.json");
+        LoadFromDisk();
+    }
+
+    public Task<IReadOnlyCollection<PrintJob>> GetAllAsync()
+        => Task.FromResult<IReadOnlyCollection<PrintJob>>(_jobs.Values.OrderByDescending(job => job.CreatedAt).ToList());
+
+    public Task<PrintJob?> GetAsync(Guid id)
+        => Task.FromResult(_jobs.TryGetValue(id, out var job) ? job : null);
+
+    public async Task UpsertAsync(PrintJob job)
+    {
+        _jobs[job.Id] = job;
+        await PersistAsync();
+    }
+
+    public async Task<PrintJob?> UpdateStatusAsync(Guid id, PrintJobStatus status)
+    {
+        if (!_jobs.TryGetValue(id, out var job))
+        {
+            return null;
+        }
+
+        var updated = job with { Status = status, UpdatedAt = DateTimeOffset.UtcNow };
+        _jobs[id] = updated;
+        await PersistAsync();
+        return updated;
+    }
+
+    public async Task<bool> RemoveAsync(Guid id)
+    {
+        var removed = _jobs.TryRemove(id, out _);
+        if (removed)
+        {
+            await PersistAsync();
+        }
+
+        return removed;
+    }
+
+    private void LoadFromDisk()
+    {
+        if (!File.Exists(_storagePath))
+        {
+            return;
+        }
+
+        var json = File.ReadAllText(_storagePath);
+        var jobs = JsonSerializer.Deserialize<List<PrintJob>>(json, SerializerOptions);
+        if (jobs is null)
+        {
+            return;
+        }
+
+        foreach (var job in jobs)
+        {
+            _jobs[job.Id] = job;
+        }
+    }
+
+    private async Task PersistAsync()
+    {
+        await _fileLock.WaitAsync();
+        try
+        {
+            var json = JsonSerializer.Serialize(_jobs.Values, SerializerOptions);
+            await File.WriteAllTextAsync(_storagePath, json);
+        }
+        finally
+        {
+            _fileLock.Release();
+        }
+    }
+
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        WriteIndented = true
+    };
+}
+
+internal sealed record PrintJob(
+    Guid Id,
+    string Name,
+    string Content,
+    PrintJobStatus Status,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt)
+{
+    public static PrintJob Create(string name, string content) => new(
+        Guid.NewGuid(),
+        name,
+        content,
+        PrintJobStatus.Queued,
+        DateTimeOffset.UtcNow,
+        DateTimeOffset.UtcNow);
+}
+
+internal sealed record PrintJobRequest(string Name, string Content);
+
+internal enum PrintJobStatus
+{
+    Queued,
+    Printing,
+    Completed,
+    Canceled
+}
+
+internal sealed class PrintServerOptions
+{
+    public string? DataDirectory { get; init; }
+}
+
+internal sealed class WebcamOptions
+{
+    public string? SnapshotPath { get; init; }
+    public string? MjpegUrl { get; init; }
+}
 
     return Results.Stream(stream, contentType: "multipart/x-mixed-replace; boundary=frame");
 });
