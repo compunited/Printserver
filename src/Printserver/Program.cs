@@ -1,6 +1,9 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
+using Printserver.Models;
+using Printserver.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,11 +11,17 @@ builder.Services.Configure<PrintServerOptions>(builder.Configuration.GetSection(
 builder.Services.Configure<WebcamOptions>(builder.Configuration.GetSection("Webcam"));
 builder.Services.AddSingleton<IPrintJobStore, FileBackedPrintJobStore>();
 builder.Services.AddSingleton<PrintJobQueue>();
+builder.Services.AddSingleton<ISerialConnectionService, SerialConnectionService>();
+builder.Services.AddSingleton<IPrinterStateService, PrinterStateService>();
+builder.Services.AddHostedService<JobProcessor>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
 app.MapGet("/", () => Results.Ok(new
+app.UseFileServer();
+
+app.MapGet("/api", () => Results.Ok(new
 {
     service = "Printserver",
     description = "Minimaler Printserver im Stil eines Repetier-Server-Grundgeruests.",
@@ -313,3 +322,60 @@ internal sealed class WebcamOptions
     public string? SnapshotPath { get; init; }
     public string? MjpegUrl { get; init; }
 }
+
+    return Results.Stream(stream, contentType: "multipart/x-mixed-replace; boundary=frame");
+});
+
+app.MapGet("/printer/profiles", (IOptions<PrintServerOptions> options) =>
+{
+    return Results.Ok(options.Value.PreheatProfiles);
+});
+
+app.MapGet("/printer/status", (IPrinterStateService state) =>
+{
+    return Results.Ok(new 
+    { 
+        state.IsPrinting, 
+        state.CurrentJobId, 
+        state.Progress, 
+        state.TotalLines, 
+        state.ProcessedLines 
+    });
+});
+
+app.MapPost("/printer/command", async (HttpRequest request, ISerialConnectionService serialService, IPrinterStateService printerState, CancellationToken cancellationToken) =>
+{
+    var commandRequest = await request.ReadFromJsonAsync<PrinterCommandRequest>(cancellationToken: cancellationToken);
+    
+    if (commandRequest is null || string.IsNullOrWhiteSpace(commandRequest.Command))
+    {
+        return Results.BadRequest(new { error = "Command cannot be empty." });
+    }
+
+    if (printerState.IsPrinting)
+    {
+        return Results.Conflict(new { error = "Printer is busy with a job." });
+    }
+
+    if (!serialService.IsConnected)
+    {
+        return Results.BadRequest(new { error = "Printer not connected." });
+    }
+
+    try
+    {
+        // TODO: Ideally verify if a job is printing to prevent interference.
+        // For now, we assume the user knows what they are doing.
+        
+        await serialService.SendGCodeLineAsync(commandRequest.Command, cancellationToken);
+        return Results.Ok(new { status = "sent", command = commandRequest.Command });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
+app.Run();
+
+
